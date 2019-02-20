@@ -9,11 +9,15 @@ This Instagram clone is my first direct clone that I have built and it is a culm
 
 ### iOS Features Used
 
-* 
+* Accessing the camera roll
+* Logging users in and/or signing them up (Using Parse database to save and check this information)
 
 
 ### Built With
 
 * [AWS](https://aws.amazon.com) - Cloud computing software hosted by Amazon
-* [Parse](https://parseplatform.org) - Databse storage platform
+* [Parse](https://parseplatform.org) - Database storage platform
 * [Cocoa Pods](https://cocoapods.org) - Swift application level dependency manager
+
+
+7709186254 - DDS
