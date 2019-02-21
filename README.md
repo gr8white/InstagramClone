@@ -10,7 +10,9 @@ This Instagram clone is my first direct clone that I have built and it is a culm
 ### iOS Features Used
 
 * Accessing the camera roll
-* Logging users in and/or signing them up (Using Parse database to save and check this information)
+* Logging users in/out and/or signing them up (Using Parse database to save and check this information)
+* Posting images to database
+* Retrieving specific information from database
 
 
 ### Built With
@@ -20,4 +22,4 @@ This Instagram clone is my first direct clone that I have built and it is a culm
 * [Cocoa Pods](https://cocoapods.org) - Swift application level dependency manager
 
 
-7709186254 - DDS
+ - DDS

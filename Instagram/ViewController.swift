@@ -82,8 +82,12 @@ class ViewController: UIViewController {
                         // Show the errorString somewhere and let the user try again.
                         
                         print(error)
+                        
                     } else {
+                        
                         print("signed up!")
+                        
+                        self.performSegue(withIdentifier: "showUserTable", sender: self) // After signup, shows user table
                     }
                     
                 })
@@ -99,6 +103,8 @@ class ViewController: UIViewController {
                     if user != nil {
                         
                         print("Login successful")
+                        
+                        self.performSegue(withIdentifier: "showUserTable", sender: self) // After log in, shows user table
                         
                     } else {
                         
@@ -152,6 +158,17 @@ class ViewController: UIViewController {
         
     }
 
+    override func viewDidAppear(_ animated: Bool) { // If user is already logged in, shows user table
+        
+        self.navigationController?.navigationBar.isHidden = true
+        
+        if PFUser.current() != nil {
+            
+            self.performSegue(withIdentifier: "showUserTable", sender: self)
+            
+        }
+    
+    }
 
 }
 
