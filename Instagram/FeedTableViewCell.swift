@@ -2,7 +2,7 @@
 //  FeedTableViewCell.swift
 //  Instagram
 //
-//  Created by Derrick White on 2/20/19.
+//  Created by Derrick White on 3/7/19.
 //  Copyright © 2019 Derrick White. All rights reserved.
 //
 
@@ -11,8 +11,8 @@ import UIKit
 class FeedTableViewCell: UITableViewCell {
 
     @IBOutlet weak var postedImage: UIImageView!
+    @IBOutlet weak var comment: UILabel!
     @IBOutlet weak var userInfo: UILabel!
-    @IBOutlet weak var caption: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()

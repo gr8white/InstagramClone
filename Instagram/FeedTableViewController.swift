@@ -2,22 +2,91 @@
 //  FeedTableViewController.swift
 //  Instagram
 //
-//  Created by Derrick White on 2/20/19.
+//  Created by Derrick White on 3/7/19.
 //  Copyright © 2019 Derrick White. All rights reserved.
 //
 
 import UIKit
+import Parse
 
 class FeedTableViewController: UITableViewController {
 
+    var users = [String: String]()
+    var comments = [String]()
+    var usernames = [String]()
+    var imageFiles = [PFFileObject]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        tableView.rowHeight = 270
+        
+        let query = PFUser.query()
+        
+        query?.whereKey("username", notEqualTo: PFUser.current()?.username)
+        
+        query?.findObjectsInBackground(block: { (objects, error) in
+            
+            if let users = objects {
+                
+                for object in users {
+                    
+                    if let user = object as? PFUser {
+                        
+                        self.users[user.objectId!] = user.username!
+                        
+                    }
+                    
+                }
+                
+            }
+            
+            let getFollowedUsersQuery = PFQuery(className: "Following")
+            
+            getFollowedUsersQuery.whereKey("follower", equalTo: PFUser.current()?.objectId)
+            
+            getFollowedUsersQuery.findObjectsInBackground(block: { (objects, error) in
+                
+                if let followers = objects {
+                    
+                    for follower in followers {
+                        
+                        if let followedUser = follower["following"] {
+                            
+                            let query = PFQuery(className: "Post")
+                            
+                            query.whereKey("userid", equalTo: followedUser)
+                            
+                            query.findObjectsInBackground(block: { (objects, error) in
+                                
+                                if let posts = objects {
+                                    
+                                    for post in posts {
+                                        
+                                        self.comments.append(post["caption"] as! String)
+                                        
+                                        self.usernames.append(self.users[post["userid"] as! String]!)
+                                        
+                                        self.imageFiles.append(post["imageFile"] as! PFFileObject)
+                            
+                                        self.tableView.reloadData()
+                                        
+                                    }
+                                    
+                                }
+                                
+                            })
+                            
+                        }
+                        
+                    }
+                    
+                }
+                
+            })
+            
+        })
+        
     }
 
     // MARK: - Table view data source
@@ -29,7 +98,7 @@ class FeedTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 4
+        return comments.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -37,12 +106,24 @@ class FeedTableViewController: UITableViewController {
 
         // Configure the cell...
         
-        cell.postedImage.image = UIImage(named: "casualHeadshot.png")
+        imageFiles[indexPath.row].getDataInBackground { (data, error) in
+            
+            if let imageData = data {
+                
+                if let imageToDisplay = UIImage(data: imageData) {
+                    
+                    cell.postedImage.image = imageToDisplay
+                    
+                }
+                
+            }
+            
+        }
         
-        cell.caption.text = "Hire me"
+        cell.comment.text = comments[indexPath.row]
         
-        cell.userInfo.text = "Ya boy"
-
+        cell.userInfo.text = usernames[indexPath.row]
+        
         return cell
     }
 
